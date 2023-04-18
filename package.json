@@ -1,0 +1,24 @@
+{
+  "name": "scale0",
+  "version": "0.0.3",
+  "description": "Serverless WordPress on Netlify & Vercel",
+  "homepage": "https://github.com/mitchmac/scale0#readme",
+  "main": "src/index.js",
+  "author": "Mitch MacKenzie",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mitchmac/scale0.git"
+  },
+  "dependencies": {
+    "isbinaryfile": "^5.0.0",
+    "node-fetch": "^2.6.9",
+    "wait-on": "^7.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
+  },
+  "scripts": {
+    "test": "jest --testPathIgnorePatterns 'e2e'"
+  }
+}
