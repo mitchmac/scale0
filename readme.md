@@ -1,6 +1,15 @@
 # Scale0
 Serverless WordPress on Vercel or Netlify
 
+Just want to get started?
+
+Try the [WordPress starter project](https://github.com/mitchmac/scale0-wordpress-starter)!
+
+| Netlify | Vercel |
+| --- | --- |
+| [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/mitchmac/scale0-wordpress-starter) |[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmitchmac%2Fscale0-wordpress-starter) |
+
+
 ## Overview
 Scale0 includes PHP 8.1 with common extensions and libraries required by WordPress to run in the Serverless function Node.js runtimes of Vercel and Netlify.
 
