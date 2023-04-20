@@ -2,7 +2,7 @@
 
 mkdir temp
 
-cp -r ../../src/ ../../php-files ../../package.json index.php temp
+cp -r ../../src/ ../../php-files ../../package.json index.php router.php temp
 
 docker build -t docker-lambda-scale0 .
 

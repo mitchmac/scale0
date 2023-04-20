@@ -26,7 +26,11 @@ async function handler(data) {
         };
 
         //@TODO: configurable php.ini path
-        const phpArgs = ['-S', '127.0.0.1:8000', '-t', docRoot, '-c', phpIniPath];
+        let phpArgs = ['-S', '127.0.0.1:8000', '-t', docRoot, '-c', phpIniPath];
+
+        if (data.routerScript) {
+            phpArgs.push(data.routerScript);
+        }
 
         php = spawn(phpPath, phpArgs, {
             env: env,
@@ -159,13 +163,21 @@ async function validate(data) {
         throw new Error("The event property cannot be empty.");
     }
 
+
     if (!data.hasOwnProperty("docRoot")) {
-        throw new Error("The docRoot property is required.");
+        throw new Error("The docRoot or routerScript property is required.");
     }
 
     const docRootExists = await exists(data.docRoot);
     if (!docRootExists) {
-      throw new Error("The docRoot property is not a valid path.");
+        throw new Error("The docRoot property is not a valid path.");
+    }
+
+    if (data.hasOwnProperty("routerScript")) {
+        const routerExists = await exists(data.routerScript);
+        if (!routerExists) {
+            throw new Error("The routerScript property is not a valid path.");
+        }
     }
 }
 
