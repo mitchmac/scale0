@@ -1,6 +1,7 @@
 const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs').promises;
+const { URL } = require('node:url');
 
 const waitOn = require('wait-on');
 const fetch = require('node-fetch');
@@ -132,6 +133,19 @@ async function handler(data) {
           }
         }
 
+
+        if (!headers['cache-control'] && response.status === 200 && (!data.hasOwnProperty('skipCacheControl') || (data.hasOwnProperty('skipCacheControl') && !data.skipCacheControl))) {
+            let cacheControl = 'max-age=3600, s-maxage=86400';
+
+            if (data.defaultCacheControl) {
+                cacheControl = data.defaultCacheControl;
+            }
+            
+            if (shouldCacheControl(url)) {
+                headers['cache-control'] = cacheControl;
+            }
+        }
+
         let returnResponse = {
           statusCode: response.status || 200,
           headers: headers,
@@ -153,6 +167,15 @@ async function handler(data) {
         statusCode: 500,
         body: 'There was a problem, check your function logs for clues.'
     }
+}
+
+//@TODO: tests
+function shouldCacheControl(url) {
+    const parsedUrl = new URL(url);
+    if (parsedUrl.pathname.match(/\.(js|css|svg|png|gif|txt|jpg|jpeg|webp|woff|woff2|ico|otf)$/gi)) {
+        return true;
+    }
+    return false;
 }
 
 async function validate(data) {
