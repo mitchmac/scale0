@@ -71,6 +71,11 @@ async function handler(data) {
             queryString = `?${event.rawQuery}`;
         }
 
+        // AWS
+        if (event.rawQueryString) {
+            queryString = `?${event.rawQueryString}`;
+        }
+
         let body = '';
         if (event.body) {
             if (event.isBase64Encoded) {
@@ -81,11 +86,48 @@ async function handler(data) {
             }
         }
 
-        const url = `http://127.0.0.1:8000${event.path}${queryString}`;
+        let urlPath = '';
+        // Vercel & Netlify.
+        if (event.path) {
+            urlPath = event.path;
+        }
+
+        // AWS.
+        if (event.rawPath && !urlPath) {
+            urlPath = event.rawPath;
+        }
+
+
+        let requestHeaders;
+        if (event.cookies) {
+            let cookielist = '';
+            for (var i = 0; i < event.cookies.length; i++) {
+                cookielist += event.cookies[i] + '; ';
+            }
+            cookielist = cookielist.slice(0, -2);
+            requestHeaders = { ...event.headers, Cookie: cookielist };
+        }
+        else {
+            requestHeaders = event.headers;
+        }
+
+        let requestMethod = 'GET';
+
+        // Vercel & Netlify.
+        if (event.httpMethod) {
+            requestMethod = event.httpMethod
+        }
+
+        // AWS
+        if (event.requestContext?.http?.method) {
+            requestMethod = event.requestContext.http.method;
+        }
+
+        const url = `http://127.0.0.1:8000${urlPath}${queryString}`;
         
         let fetchOpts = {
-          method: event.httpMethod,
-          headers: event.headers,
+          method: requestMethod,
+          headers: requestHeaders,
           redirect: 'manual',
           compress: false
         };
@@ -152,6 +194,14 @@ async function handler(data) {
           body: responseBody,
           isBase64Encoded: base64Encoded
         };
+
+        // AWS
+        if (!process.env['VERCEL'] && !process.env['SITE_NAME']) {
+            if (multiHeaders['set-cookie']) {
+                returnResponse.cookies = multiHeaders['set-cookie'];
+                delete multiHeaders['set-cookie'];
+            }
+        }
 
         if (multiHeaders['set-cookie']) {
             returnResponse.multiValueHeaders = multiHeaders;

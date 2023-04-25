@@ -1,6 +1,6 @@
 {
   "name": "scale0",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Serverless WordPress on Netlify & Vercel",
   "homepage": "https://github.com/mitchmac/scale0#readme",
   "main": "src/index.js",
