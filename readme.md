@@ -35,3 +35,6 @@ Where
 
 * docRoot is the path to WordPress files
 * event is the serverless event data from Vercel or Netlify
+
+## License
+MIT
